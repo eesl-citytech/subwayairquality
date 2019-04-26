@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Particulate Matter in Air</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1> Air Quality PM2.5</h1>
+        <h4>Date: <span id="date"></span></h4>
+         <canvas id="myChart"></canvas>
+
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:4000'); //connect to server
+            var ctx = document.getElementById("myChart").getContext('2d');
+
+            var chart = new Chart(ctx,{
+                            // The type of chart we want to create
+                            type: 'line',
+                            // The data for our dataset
+                            data: {
+                            labels: [],
+                            datasets: [{
+                                label: "PM",
+                                borderColor: "#FF5733",
+                                data: [],
+                                fill: false,
+                                pointStyle: 'circle',
+                                backgroundColor: '#3498DB',
+                                pointRadius: 5,
+                                pointHoverRadius: 7,
+                                lineTension: 0,
+                            }]
+                            },
+                            // Configuration options go here
+
+
+                                      options: {
+                                        scales: {
+                                          yAxes: [{
+                                            ticks: {
+                                              beginAtZero: true,
+                                              events: ['string'],
+                                              mode: 'point',
+                                              suggestedMin: 0,
+                                              suggestedMax: 150,
+                                            }
+                                          }]
+                                          // xAxes: [{
+                                          //     type: 'time',
+                                          //       time: {
+                                          //         unit: 'second'
+                                          //       }
+                                          // }]
+                                      }
+                                    }
+                                 });
+            socket.on('pm', function(data) { //As a temp data is received
+                console.log(data.pm);
+                document.getElementById('date').innerHTML = data.date; //update the date
+                    if(chart.data.labels.length != 15) { //If we have less than 15 data points in the graph
+                        chart.data.labels.push(data.time);  //Add time in x-asix
+                        chart.data.datasets.forEach((dataset) => {
+                            dataset.data.push(data.pm); //Add temp in y-axis
+                        });
+                    }
+                    else { //If there are already 15 data points in the graph.
+                        chart.data.labels.shift(); //Remove first time data
+                        chart.data.labels.push(data.time); //Insert latest time data
+                        chart.data.datasets.forEach((dataset) => {
+                            dataset.data.shift(); //Remove first temp data
+                            dataset.data.push(data.pm); //Insert latest temp data
+                        });
+                    }
+                    chart.update(); //Update the graph.
+              });
+        </script>
+    </body>
+    <style>
+        h1 {
+            text-align: center;
+            font-family: 'Lato', sans-serif;
+        }
+        h4 {
+            text-align: center;
+            font-family: 'Lato', sans-serif;
+        }
+        p {
+            text-align: center;
+            font-family: 'Lato', sans-serif;
+        }
+    </style>
+</html>
+
+<!-- <html>
+<head>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:8080');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+</script>
+<h1>working</h1>
+</body>
+</html> -->
+
+<!-- <html>
+<head>
+  <meta charset="utf-8" />
+  <title>Socket.io</title>
+</head>
+<body>
+  <h1>Welcome!</h1>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script>
+var socket = io('http://localhost:8080');
+socket.on('news', function (data) {
+  console.log(data);
+  socket.emit('my other event', { my: 'data' });
+});
+</script>
+
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Socket.io</title>
+    </head>
+
+    <body>
+        <h1>Communication with socket.io!</h1>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:8080');
+        </script>
+    </body>
+</html> -->

@@ -1,0 +1,19 @@
+{
+  "name": "airqualityApp",
+  "version": "1.0.0",
+  "description": "Display PM Data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Patrice Prosper",
+  "license": "ISC",
+  "dependencies": {
+    "chart.js": "^2.8.0",
+    "express": "^4.16.4",
+    "moment": "^2.24.0",
+    "serialport": "^7.1.4",
+    "socket.io-client": "^2.2.0",
+    "socketio": "^1.0.0"
+  }
+}
