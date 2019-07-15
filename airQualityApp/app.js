@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 // moment().format();
 const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
-const port = new SerialPort('/dev/cu.usbmodemFD121');  //add my port here
+const port = new SerialPort('/dev/cu.usbmodemFA131');  //add my port here
 const parser = port.pipe(new Readline({delimiter: '\r\n'}));
 
 
@@ -28,10 +28,10 @@ parser.on('data', (pm) => { //use variable for pm data
 
   });
 
-// io.on('pm25', function (data) {
-// console.log(data);
-//
-// });
+io.on('pm25', function (data) {
+console.log(data);
+
+});
 
 io.on('connection', (socket)=> {
     console.log("Someone connected."); //show a log as a new client connects.
@@ -56,12 +56,12 @@ io.on('connection', (socket)=> {
 //     console.log(data);
 //   });
 // });
-
+//
 // var app = require('http').createServer(handler);
 // var io = require('socket.io')(app);
 // var fs = require('fs');
 //
-// app.listen(8080);
+// app.listen(4000);
 //
 // function handler (req, res) {
 //   fs.readFile(__dirname + '/public/index.html',
@@ -82,8 +82,8 @@ io.on('connection', (socket)=> {
 //     console.log(data);
 //   });
 // });
-
-
+//
+//
 // var http = require('http');
 // var fs = require('fs');
 //
@@ -104,4 +104,4 @@ io.on('connection', (socket)=> {
 // });
 //
 //
-// server.listen(8080);
+// server.listen(4000);
